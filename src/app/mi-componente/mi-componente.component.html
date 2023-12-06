@@ -1,0 +1,123 @@
+<h1 class="text-center headers">TUDU</h1>
+<hr class="margin-top:-1px; background=#fff">
+<section class="row ">
+
+    <!-- Bloque de menú -->
+    <div class="col-md-4 col-lg-3 col-sm-6 col-12" >
+        <div class="mocoso">
+            <h3 class="text-center">Menu</h3>
+            <hr style="margin-top:-1px; background:#fff">
+            <div class="card text-center tarjetaProfile">
+                <div class="forma-cuadro">
+                    <img class="card-img-top profilePicture" src="https://images.pexels.com/photos/1851164/pexels-photo-1851164.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="20" alt="Card image cap">
+                </div>
+                
+            </div>
+            <ul class="list-group mt-3 stickyMenu">
+                <li class="list-group-item" *ngFor="let menuItem of menuItems; let i = index">
+                    <button type="button" class="btn btn-outline-primary w-100" 
+                    (click)="setMenuItemAsActive(i)"
+                    [ngClass]="{'active': menuItem.active}">
+                    {{menuItems[i].item}}</button>
+                </li>
+                <!-- <li class="list-group-item">
+                    <button type="button" class="btn btn-outline-primary w-100"
+                    (click)="setMenuItemAsActive(menuItems[0])"
+                    [ngClass]="{'active': menuItems[1].active}">
+                    {{menuItems[1].item}}</button>
+                    <a href="/mvc/tareas" class="btn btn-link text-white">Mis tareas</a>
+                </li> -->
+            </ul>
+
+        </div>
+    </div>
+
+    <!-- Contenedor global -->
+    <div class="col">
+        <!-- Contenedor de tareas -->
+        <div class="row" *ngIf="menuItems[1].active; else formulario">
+            <h3 class="col-12 text-center">Tareas</h3>
+            <hr class="col-12">
+            <!-- {{tareas | json}} -->
+            <div class="card p-1 col-12 col-sm-6 col-lg-6" *ngFor="let tarea of tareas; let i = index">
+                <div class="card-header text-center text-white" 
+                    [ngClass]="{
+                                    'bg-warning' : tarea.status == 'Pendiente', 
+                                    'bg-success' : tarea.status == 'Completado', 
+                                    'bg-danger' : tarea.status == 'Retrasado'
+                                }">
+                    <h2>{{tarea.titulo}}</h2>
+                </div>
+                <div class="card-body">
+                    <p>{{tarea.descripcion}}</p>
+                </div>
+                <div class="card-footer text-center d-flex justify-content-between">
+                    <p></p>
+                    <p [ngClass]="
+                        {
+                            'text-warning' : tarea.status == 'Pendiente', 
+                            'text-success' : tarea.status == 'Completado', 
+                            'text-danger' : tarea.status == 'Retrasado'
+                        }">
+                        {{tarea.status}}
+
+                    </p>
+                    <div>
+                        <button 
+                            class="btn btn-small btn-danger" 
+                            (click)="cambiarStatus(i,'Retrasado')"
+                            *ngIf="tarea.status == 'Pendiente'"
+                        >X</button>
+                        <button 
+                            class="btn btn-small btn-success" 
+                            (click)="cambiarStatus(i,'Completado')"
+                            *ngIf="tarea.status != 'Completado'"
+                        >✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+
+        <!-- Formulario para nueva tarea   -->
+        <ng-template #formulario>
+            <div class="row">
+                <h3 class="col-12 text-center">Nueva Tarea</h3>
+                <hr class="col-12">
+
+                <form class="col-6">
+                    <div class="form-floating m-2">
+                        <!-- <input type="text" id="titulo" class="form-control" [(value)]="newTarea.titulo"/> -->
+                        <input #tituloInput type="text" id="titulo" class="form-control" required/>
+                        <label for="titulo">Titulo de la tarea</label>
+                    </div>
+                    <div class="form-floating m-2">
+                        <textarea 
+                            #descripcionInput
+                            name="descripcion" 
+                            id="descripcion" 
+                            cols="30" rows="5" 
+                            class="form-control" 
+                            placeholder="" required></textarea>
+                        <label for="titulo">Descripcion de la tarea</label>
+                    </div>
+                    <button type="button" 
+                        (click)="agregarTarea(tituloInput.value, descripcionInput.value)"
+                        class="btn btn-outline-primary m-2">Agregar</button>
+                    <!-- {{newTarea | json}} -->
+                </form>
+            </div> 
+        </ng-template>      
+    </div>
+</section>
+<script>
+     setTimeout(()=>{
+
+    let alerta = document.getElementById('alerta');
+    if (alerta) {
+        
+        alerta.remove();
+    }
+    },4000);
+
+</script>
+
